@@ -31,13 +31,21 @@ jobs:
     - name: Install Playwright browsers
       run: uv run playwright install --with-deps chromium
 
+    - name: Create reports directory
+      run: mkdir -p reports
+
     - name: Run tests
       run: uv run pytest
       continue-on-error: true
 
+    - name: Check if reports exist
+      run: |
+        ls -la reports/ || echo "Reports directory not found"
+        test -f reports/report.html && echo "Report file exists" || echo "Report file missing"
+
     - name: Deploy HTML Report to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
-      if: always()
+      if: always() && hashFiles('reports/report.html') != ''
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_branch: gh-pages

@@ -1,13 +1,8 @@
 FROM python:3.12-slim
 
-# Install system dependencies and Allure
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     curl \
-    default-jre \
-    && curl -o allure-2.24.0.tgz -L https://github.com/allure-framework/allure2/releases/download/2.24.0/allure-2.24.0.tgz \
-    && tar -zxvf allure-2.24.0.tgz -C /opt/ \
-    && ln -s /opt/allure-2.24.0/bin/allure /usr/bin/allure \
-    && rm allure-2.24.0.tgz \
     && rm -rf /var/lib/apt/lists/*
 
 # Install uv
@@ -31,7 +26,7 @@ RUN uv sync --no-cache
 RUN uv run playwright install --with-deps chromium
 
 # Create reports directory
-RUN mkdir -p reports/screenshots allure-results allure-report
+RUN mkdir -p reports/screenshots
 
 # Run tests by default
 CMD ["uv", "run", "pytest", "-v"]
