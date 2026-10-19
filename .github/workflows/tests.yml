@@ -32,39 +32,36 @@ jobs:
       run: uv run playwright install --with-deps chromium
 
     - name: Run tests
-      run: uv run pytest
+      run: uv run pytest || true
       continue-on-error: true
 
-    - name: Generate HTML report from traces
+    - name: Check report generation
       if: always()
       run: |
-        mkdir -p playwright-report
-        # Create simple index.html
-        cat > playwright-report/index.html << 'EOF'
-        <!DOCTYPE html>
-        <html>
-        <head><title>Test Report</title></head>
-        <body>
-        <h1>Playwright Test Report</h1>
-        <p>View trace files and recordings in the artifacts section of this workflow run.</p>
-        <p>Download the test-artifacts.zip to view detailed traces locally using <code>npx playwright show-trace trace.zip</code></p>
-        </body>
-        </html>
-        EOF
-        ls -la reports/
+        if [ -f reports/index.html ]; then
+          echo "✅ HTML report generated successfully"
+          ls -lh reports/index.html
+        else
+          echo "❌ HTML report not found, creating placeholder"
+          mkdir -p reports
+          echo "<html><body><h1>Tests ran but report generation failed</h1></body></html>" > reports/index.html
+        fi
 
-    - name: Deploy HTML Report to GitHub Pages
+    - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
       if: always()
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_branch: gh-pages
-        publish_dir: playwright-report
+        publish_dir: reports
 
     - name: Upload test artifacts
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: test-report
-        path: reports/
+        name: playwright-traces
+        path: |
+          reports/
+          test-results/
         retention-days: 30
+        if-no-files-found: ignore

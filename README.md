@@ -30,7 +30,7 @@ uv sync
 # Install Playwright browsers
 uv run playwright install
 
-# Run tests
+# Run tests (generates HTML report automatically)
 uv run pytest
 
 # Run with headed mode
@@ -38,9 +38,14 @@ uv run pytest --headed
 
 # Run specific test file
 uv run pytest tests/test_home_page.py -v
+
+# View HTML report (generated after any test run)
+open reports/index.html  # macOS
+start reports/index.html # Windows
+xdg-open reports/index.html # Linux
 ```
 
-Test artifacts (traces, videos, screenshots) are saved to `reports/` directory.
+HTML reports are automatically generated at `reports/index.html` on every test run.
 
 ### Docker Setup
 
@@ -55,24 +60,32 @@ docker-compose up
 docker-compose down
 ```
 
-## Test Artifacts
+## Test Reports
+
+### HTML Reports
+
+HTML reports are automatically generated at `reports/index.html` on every test run (both local and CI).
+
+**Local:**
+Simply run `uv run pytest` and open `reports/index.html` in your browser.
+
+**GitHub Pages:**
+View reports online at: `https://<username>.github.io/<repo-name>/`
+
+### Playwright Traces
 
 Playwright automatically generates test artifacts in `./reports/` directory:
 - **Traces** - Interactive timeline of test execution
 - **Videos** - Screen recordings of tests
 - **Screenshots** - Images captured during tests
 
-### View Traces
-
-**Local:**
+**View traces locally:**
 ```bash
-# View trace file interactively
 npx playwright show-trace reports/trace.zip
 ```
 
 **GitHub Actions:**
-- Download artifacts from workflow run
-- Use Playwright trace viewer to analyze failures
+Download artifacts from workflow run to analyze with Playwright trace viewer
 
 ## Configuration
 
@@ -86,10 +99,18 @@ Edit `config.py` to change:
 
 Tests run automatically on push/PR to main branch.
 
+**HTML Reports:**
+- Automatically published to GitHub Pages
+- View at: `https://<username>.github.io/<repo-name>/`
+
+**Setup GitHub Pages:**
+1. Go to repository Settings → Pages
+2. Set source to "GitHub Actions"
+3. Push code to trigger workflow
+
 **Artifacts:**
 - Test traces, videos, and screenshots are uploaded as workflow artifacts
-- Download from the Actions tab to analyze test results
-- Use `npx playwright show-trace trace.zip` to view interactive traces
+- Download from Actions tab to analyze with `npx playwright show-trace trace.zip`
 
 ## Requirements
 
