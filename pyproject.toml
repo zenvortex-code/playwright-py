@@ -10,5 +10,5 @@ dependencies = [
     "pytest>=7.4.3",
     "pytest-playwright>=0.4.3",
     "playwright>=1.40.0",
-    "allure-pytest>=2.13.2",
+    "pytest-html>=4.1.1",
 ]

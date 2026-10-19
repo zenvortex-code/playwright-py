@@ -37,10 +37,5 @@ playwright-report/
 .playwright/
 reports/
 
-# Allure
-allure-results/
-allure-report/
-.allure/
-
 # Logs
 *.log
