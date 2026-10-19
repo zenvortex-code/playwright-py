@@ -31,24 +31,35 @@ jobs:
     - name: Install Playwright browsers
       run: uv run playwright install --with-deps chromium
 
-    - name: Run tests and generate HTML report
-      run: |
-        mkdir -p reports
-        uv run pytest --html=reports/report.html --self-contained-html
+    - name: Run tests
+      run: uv run pytest
       continue-on-error: true
 
-    - name: Check if reports exist
+    - name: Generate HTML report from traces
+      if: always()
       run: |
-        ls -la reports/ || echo "Reports directory not found"
-        test -f reports/report.html && echo "Report file exists" || echo "Report file missing"
+        mkdir -p playwright-report
+        # Create simple index.html
+        cat > playwright-report/index.html << 'EOF'
+        <!DOCTYPE html>
+        <html>
+        <head><title>Test Report</title></head>
+        <body>
+        <h1>Playwright Test Report</h1>
+        <p>View trace files and recordings in the artifacts section of this workflow run.</p>
+        <p>Download the test-artifacts.zip to view detailed traces locally using <code>npx playwright show-trace trace.zip</code></p>
+        </body>
+        </html>
+        EOF
+        ls -la reports/
 
     - name: Deploy HTML Report to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
-      if: always() && hashFiles('reports/report.html') != ''
+      if: always()
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_branch: gh-pages
-        publish_dir: reports
+        publish_dir: playwright-report
 
     - name: Upload test artifacts
       uses: actions/upload-artifact@v4
