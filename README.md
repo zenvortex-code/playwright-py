@@ -38,12 +38,9 @@ uv run pytest --headed
 
 # Run specific test file
 uv run pytest tests/test_home_page.py -v
-
-# View HTML report (generated after test run)
-open reports/report.html  # macOS
-start reports/report.html # Windows
-xdg-open reports/report.html # Linux
 ```
+
+Test artifacts (traces, videos, screenshots) are saved to `reports/` directory.
 
 ### Docker Setup
 
@@ -58,20 +55,24 @@ docker-compose up
 docker-compose down
 ```
 
-## Test Reports
+## Test Artifacts
 
-Reports are automatically saved to `./reports/` directory:
-- `report.html` - Main HTML test report (self-contained)
-- Screenshots and videos (on test failure)
-- Trace files (on test failure)
+Playwright automatically generates test artifacts in `./reports/` directory:
+- **Traces** - Interactive timeline of test execution
+- **Videos** - Screen recordings of tests
+- **Screenshots** - Images captured during tests
 
-### View Reports
+### View Traces
 
 **Local:**
-Open `reports/report.html` in your browser after running tests.
+```bash
+# View trace file interactively
+npx playwright show-trace reports/trace.zip
+```
 
-**GitHub Pages:**
-Reports are automatically published at: `https://<username>.github.io/<repo-name>/report.html`
+**GitHub Actions:**
+- Download artifacts from workflow run
+- Use Playwright trace viewer to analyze failures
 
 ## Configuration
 
@@ -83,13 +84,12 @@ Edit `config.py` to change:
 
 ## GitHub Actions
 
-Tests run automatically on push/PR to main branch. HTML reports are published to GitHub Pages.
+Tests run automatically on push/PR to main branch.
 
-**Setup:**
-1. Enable GitHub Pages in repository settings
-2. Set source to "GitHub Actions"
-3. Push code to trigger workflow
-4. View reports at: `https://<username>.github.io/<repo-name>/report.html`
+**Artifacts:**
+- Test traces, videos, and screenshots are uploaded as workflow artifacts
+- Download from the Actions tab to analyze test results
+- Use `npx playwright show-trace trace.zip` to view interactive traces
 
 ## Requirements
 
