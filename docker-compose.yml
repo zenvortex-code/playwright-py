@@ -1,0 +1,8 @@
+services:
+  playwright-tests:
+    build: .
+    volumes:
+      - ./reports:/app/reports
+    environment:
+      - CI=true
+    command: uv run pytest -v

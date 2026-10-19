@@ -1,0 +1,13 @@
+[project]
+name = "playwright-py"
+version = "0.1.0"
+description = "Playwright + pytest test framework"
+authors = [
+    { name = "Oleg", email = "oleg.bestcennyi@gmail.com" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "pytest>=7.4.3",
+    "pytest-playwright>=0.4.3",
+    "playwright>=1.40.0",
+]
