@@ -35,9 +35,18 @@ jobs:
       run: uv run pytest -v
       continue-on-error: true
 
+    - name: Check if gh-pages exists
+      id: check-branch
+      run: |
+        if git ls-remote --heads origin gh-pages | grep gh-pages; then
+          echo "exists=true" >> $GITHUB_OUTPUT
+        else
+          echo "exists=false" >> $GITHUB_OUTPUT
+        fi
+
     - name: Get Allure history
       uses: actions/checkout@v4
-      if: always()
+      if: always() && steps.check-branch.outputs.exists == 'true'
       continue-on-error: true
       with:
         ref: gh-pages
@@ -50,6 +59,7 @@ jobs:
         allure_results: allure-results
         allure_history: allure-history
         keep_reports: 20
+        gh_pages: gh-pages/allure-history
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
