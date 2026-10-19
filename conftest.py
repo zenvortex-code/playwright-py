@@ -6,10 +6,8 @@ from pages.home_page import HomePage
 from pages.docs_page import DocsPage
 from config import DEFAULT_VIEWPORT
 
-
-def pytest_configure(config):
-    """Ensure reports directory exists before pytest starts."""
-    os.makedirs('reports', exist_ok=True)
+# Ensure reports directory exists before logging is configured
+os.makedirs('reports', exist_ok=True)
 
 # Configure logging
 logging.basicConfig(

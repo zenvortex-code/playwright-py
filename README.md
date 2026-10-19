@@ -74,14 +74,14 @@ View reports online at: `https://<username>.github.io/<repo-name>/`
 
 ### Playwright Traces
 
-Playwright automatically generates test artifacts in `./reports/` directory:
+Playwright automatically generates test artifacts in `./test-results/` directory:
 - **Traces** - Interactive timeline of test execution
 - **Videos** - Screen recordings of tests
 - **Screenshots** - Images captured during tests
 
 **View traces locally:**
 ```bash
-npx playwright show-trace reports/trace.zip
+npx playwright show-trace test-results/trace.zip
 ```
 
 **GitHub Actions:**

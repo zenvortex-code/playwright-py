@@ -28,14 +28,13 @@ ENV/
 .idea/
 .vscode/
 
-# uv
-.venv
-
 # Playwright
 test-results/
 playwright-report/
 .playwright/
-reports/
+reports/*
+!reports/.gitkeep
+!reports/README.md
 
 # Logs
 *.log
