@@ -31,11 +31,10 @@ jobs:
     - name: Install Playwright browsers
       run: uv run playwright install --with-deps chromium
 
-    - name: Create reports directory
-      run: mkdir -p reports
-
-    - name: Run tests
-      run: uv run pytest
+    - name: Run tests and generate HTML report
+      run: |
+        mkdir -p reports
+        uv run pytest --html=reports/report.html --self-contained-html
       continue-on-error: true
 
     - name: Check if reports exist
