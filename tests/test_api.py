@@ -38,7 +38,6 @@ class FruitsPage:
         with self.page.expect_response(_is_fruits_get) as response_info:
             self.page.goto(FULL_URL)
         response = response_info.value
-        assert response.ok, f"Initial fruits request failed: {response.status}"
         return response
 
 
@@ -47,6 +46,7 @@ def test_list_matches_initial_api_response(page: Page) -> None:
     fruits = FruitsPage(page)
 
     response = fruits.open_and_wait_for_api()
+    assert response.ok, f"Initial fruits request failed: {response.status}"
     names = [item["name"] for item in response.json()]
     assert names, "API returned no fruits"
 
